@@ -1,3 +1,15 @@
-node_modules
+# Dependencias
+node_modules/
+
+# Variables de entorno
 .env
-PRUEBAPROG.FDB
+
+# Archivos de base de datos Firebird
+*.FDB
+*.fdb
+
+# Logs
+*.log
+
+# Archivos temporales
+tmp/

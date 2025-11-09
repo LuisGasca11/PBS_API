@@ -9,7 +9,6 @@ const options = {
   database: process.env.FB_DB,
   user: process.env.FB_USER,
   password: process.env.FB_PASSWORD,
-  WireCrypt: 'Disabled'
 };
 
 for (const [key, value] of Object.entries(options)) {
