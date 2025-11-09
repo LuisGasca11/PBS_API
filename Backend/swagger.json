@@ -1,0 +1,183 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API Firebird Artículos",
+    "version": "1.0.0",
+    "description": "API REST para consultar ARTÍCULOS y CLAVES_ARTICULOS desde Firebird (Microsip)."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local"
+    }
+  ],
+  "paths": {
+    "/v1/public/articulos": {
+      "get": {
+        "summary": "Lista artículos",
+        "description": "Obtiene los artículos con filtros opcionales y paginación.",
+        "parameters": [
+          {
+            "name": "nombre",
+            "in": "query",
+            "description": "Filtra por NOMBRE o CLAVE_ARTICULO",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "estatus",
+            "in": "query",
+            "description": "Filtra por ESTATUS",
+            "required": false,
+            "schema": { "type": "string", "enum": ["Activo", "Inactivo"] }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Cantidad máxima de registros (≤100)",
+            "required": false,
+            "schema": { "type": "integer", "default": 100 }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Número de registros a saltar",
+            "required": false,
+            "schema": { "type": "integer", "default": 0 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de artículos",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "ARTICULO_ID": 1,
+                    "NOMBRE": "Producto A",
+                    "ESTATUS": "Activo",
+                    "CLAVE_ARTICULO": "PRODA01"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/articulos/{id}": {
+      "get": {
+        "summary": "Artículo por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID del artículo",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artículo encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ARTICULO_ID": 1,
+                  "NOMBRE": "Producto A",
+                  "ESTATUS": "Activo",
+                  "CLAVE_ARTICULO": "PRODA01"
+                }
+              }
+            }
+          },
+          "404": { "description": "Artículo no encontrado" }
+        }
+      }
+    },
+    "/v1/public/articulos/{id}/claves": {
+      "get": {
+        "summary": "Claves de un artículo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID del artículo",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "Buscar por CLAVE_ARTICULO",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de claves del artículo",
+            "content": {
+              "application/json": {
+                "example": [
+                  { "CLAVE_ARTICULO": "PRODA01", "UNIDAD_VENTA": "PZA" },
+                  { "CLAVE_ARTICULO": "PRODA01-2", "UNIDAD_VENTA": "Caja" }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/claves/{clave}": {
+      "get": {
+        "summary": "Buscar artículo por clave",
+        "parameters": [
+          {
+            "name": "clave",
+            "in": "path",
+            "required": true,
+            "description": "CLAVE_ARTICULO",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artículo encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ARTICULO_ID": 1,
+                  "NOMBRE": "Producto A",
+                  "ESTATUS": "Activo",
+                  "CLAVE_ARTICULO": "PRODA01"
+                }
+              }
+            }
+          },
+          "404": { "description": "Artículo no encontrado" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Articulo": {
+        "type": "object",
+        "properties": {
+          "ARTICULO_ID": { "type": "integer" },
+          "NOMBRE": { "type": "string" },
+          "ESTATUS": { "type": "string" },
+          "CLAVE_ARTICULO": { "type": "string" }
+        }
+      },
+      "ClaveArticulo": {
+        "type": "object",
+        "properties": {
+          "CLAVE_ARTICULO": { "type": "string" },
+          "UNIDAD_VENTA": { "type": "string" }
+        }
+      }
+    }
+  }
+}
